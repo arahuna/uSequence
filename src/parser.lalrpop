@@ -1,0 +1,78 @@
+
+use crate::utils::prerequisite_tree::*;
+use std::str::FromStr;
+
+grammar;
+
+/* START */
+pub Prerequisite: PrerequisiteTree = {
+    <expr: PrereqExpr>"." => expr,
+    <m: MinCredits>"." => m,
+    <expr: PrereqExpr> AND <m: MinCredits>"." => PrerequisiteTree::AndNode(LogicNode::new(expr, m)),
+    <expr: PrereqExpr> OR <m: MinCredits>"." => PrerequisiteTree::OrNode(LogicNode::new(expr, m)),
+}
+
+/* NON-TERMINALS */
+PrereqExpr: PrerequisiteTree = {
+    <left: PrereqExpr> AND <right: PrereqCondition> => PrerequisiteTree::AndNode(LogicNode::new(left, right)),
+    <left: PrereqExpr> OR <right: PrereqCondition> => PrerequisiteTree::OrNode(LogicNode::new(left, right)),
+    <c: PrereqCondition> => c
+}
+
+PrereqCondition: PrerequisiteTree = {
+    "(" <expr: PrereqExpr> ")" => expr,
+    <c: Course> => PrerequisiteTree::CourseNode(c),
+}
+
+Course: CourseNode = {
+    <subject_code: SubjectCode> <catalog_code: CourseCode> => CourseNode{ <> }
+}
+
+MinCredits: PrerequisiteTree = {
+    <units: r"[0-9]{1,2}"> r"(university|course)" "units in" <s:SubjectExpr> => PrerequisiteTree::MinCreditNode(MinCreditNode{ 
+        credits: u32::from_str(units).unwrap(),
+        required_subjects: Some(s),
+        required_levels: None
+     }),
+     <units: r"[0-9]{1,2}"> r"(university|course)" "units in" <s:SubjectExpr> "at the" <l: LevelExpr> "level" => PrerequisiteTree::MinCreditNode(MinCreditNode{ 
+        credits: u32::from_str(units).unwrap(),
+        required_subjects: Some(s),
+        required_levels: Some(l)
+     }),
+}
+
+pub SubjectExpr: Vec<String> = {
+    <s: SubjectCode> => vec![s],
+    <s: SubjectCode> OR <rest: SubjectExpr> => {
+        let mut v = vec![s];
+        v.extend(rest);
+        v
+    }
+}
+
+LevelExpr: Vec<u32> = {
+    <l: CourseCode> => vec![l],
+    <l: CourseCode> OR <rest: LevelExpr> => {
+        let mut v = vec![l];
+        v.extend(rest);
+        v
+    }
+}
+
+/* TERMINALS */
+AND: () = {
+    "," => (),
+    "and" => (),
+}
+
+OR: () = {
+    "or" => (),
+}
+
+SubjectCode: String = {
+    r"[A-Z]{3}" => String::from(<>)
+}
+
+CourseCode: u32 = {
+    r"\d{4}" => u32::from_str(<>).unwrap()
+}
