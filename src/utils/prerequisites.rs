@@ -165,7 +165,7 @@ mod tests {
             terms_offered: HashMap::new(),
         };
 
-        let courses_taken = vec![binding, binding2];
+        let courses_taken = vec![&binding, &binding2];
 
         let tree = Some(PrerequisiteTree::CourseNode(CourseNode {
             subject_code: String::from("CSI"),
