@@ -6,7 +6,7 @@ use super::{
     term::{Season, Term},
 };
 
-#[derive(Debug, Deserialize, Copy, Clone)]
+#[derive(Debug, Deserialize, Copy, Clone, FromForm)]
 pub struct SequenceConfig {
     pub include_summer: bool,
     pub starting_year: u32,
@@ -20,7 +20,7 @@ pub fn sequence_courses(mut courses: Vec<Course>, config: SequenceConfig) -> Vec
 
     // Instatiate some necessary variables
     let mut result: Vec<Term> = vec![];
-    let mut courses_taken: Vec<&Course> = vec![];
+    let mut courses_taken: Vec<Course> = vec![];
 
     // Set starting year and season
     let mut current_season = config.starting_semester;
@@ -42,7 +42,7 @@ pub fn sequence_courses(mut courses: Vec<Course>, config: SequenceConfig) -> Vec
             }
         }
 
-        courses_taken.extend(&current_term.courses);
+        courses_taken.extend(current_term.courses.clone());
 
         result.push(current_term);
         current_season = current_season.next(config.include_summer);

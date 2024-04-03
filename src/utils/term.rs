@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use super::course::Course;
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, Deserialize)]
+#[derive(Debug, Hash, PartialEq, Eq, Copy, Clone, Serialize, Deserialize, FromFormField)]
 pub enum Season {
     Summer,
     Fall,
@@ -37,7 +37,7 @@ impl Season {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Term {
     season: Season,
     year: u32,

@@ -1,7 +1,10 @@
 use core::fmt;
 use lalrpop_util::lalrpop_mod;
 use parser::PrerequisiteParser;
-use serde::Deserialize;
+use serde::{
+    ser::{SerializeStruct, Serializer},
+    Deserialize, Serialize,
+};
 use std::collections::HashMap;
 
 use super::{prerequisite_tree::PrerequisiteTree, term::Season};
@@ -67,6 +70,20 @@ impl Course {
                 (Season::Fall, input.fall),
             ]),
         }
+    }
+}
+
+impl Serialize for Course {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        let mut state = serializer.serialize_struct("Course", 3)?;
+        state.serialize_field("subject_code", &self.subject_code)?;
+        state.serialize_field("catalog_code", &self.catalog_code)?;
+        state.serialize_field("course_name", &self.course_name)?;
+
+        state.end()
     }
 }
 

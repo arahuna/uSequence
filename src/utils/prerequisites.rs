@@ -2,7 +2,7 @@ use super::{course::Course, prerequisite_tree::PrerequisiteTree};
 
 pub fn validate_prerequisites(
     prerequisites: &Option<PrerequisiteTree>,
-    courses_taken: &Vec<&Course>,
+    courses_taken: &Vec<Course>,
 ) -> bool {
     if let Some(prerequisites) = prerequisites {
         evaluate_prerequisite_tree(prerequisites, courses_taken)
@@ -11,7 +11,7 @@ pub fn validate_prerequisites(
     }
 }
 
-fn evaluate_prerequisite_tree(tree: &PrerequisiteTree, courses_taken: &Vec<&Course>) -> bool {
+fn evaluate_prerequisite_tree(tree: &PrerequisiteTree, courses_taken: &Vec<Course>) -> bool {
     match tree {
         PrerequisiteTree::CourseNode(course_node) => courses_taken.iter().any(|course| {
             course.subject_code == course_node.subject_code
@@ -38,7 +38,7 @@ fn satisfies_min_credits(
     credits_required: u32,
     required_levels: &Option<Vec<u32>>,
     required_subjects: &Option<Vec<String>>,
-    courses_taken: &Vec<&Course>,
+    courses_taken: &Vec<Course>,
 ) -> bool {
     let total_credits = courses_taken
         .iter()
@@ -82,7 +82,7 @@ mod tests {
             prerequisites: None,
             terms_offered: HashMap::new(),
         };
-        let courses_taken = vec![&binding, &binding2];
+        let courses_taken = vec![binding, binding2];
 
         assert_eq!(
             satisfies_min_credits(6, &None, &None, &courses_taken),
@@ -133,7 +133,7 @@ mod tests {
             terms_offered: HashMap::new(),
         };
 
-        let courses_taken = vec![&binding, &binding2];
+        let courses_taken = vec![binding, binding2];
 
         let tree = PrerequisiteTree::CourseNode(CourseNode {
             subject_code: String::from("CSI"),
@@ -165,7 +165,7 @@ mod tests {
             terms_offered: HashMap::new(),
         };
 
-        let courses_taken = vec![&binding, &binding2];
+        let courses_taken = vec![binding, binding2];
 
         let tree = Some(PrerequisiteTree::CourseNode(CourseNode {
             subject_code: String::from("CSI"),
