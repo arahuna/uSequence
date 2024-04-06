@@ -1,5 +1,5 @@
 use core::fmt;
-use rocket::serde::Deserialize;
+use rocket::{serde::Deserialize, FromFormField};
 use serde::Serialize;
 
 use super::course::Course;

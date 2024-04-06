@@ -1,18 +1,15 @@
-mod utils;
-
 use rocket::form::Form;
-use rocket::fs::TempFile;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::tokio::io::AsyncReadExt;
-use utils::input::validate_input;
-use utils::sequence::sequence_courses;
-use utils::sequence::SequenceConfig;
-use utils::term::Season;
-use utils::term::Term;
 
-use crate::utils::csv::parse_csv;
+use usequence_server::models::RequestBody;
+use usequence_server::utils::csv::parse_csv;
+use usequence_server::utils::input::validate_input;
+use usequence_server::utils::sequence::sequence_courses;
+use usequence_server::utils::sequence::SequenceConfig;
+use usequence_server::utils::term::Term;
 
 #[macro_use]
 extern crate rocket;
@@ -21,15 +18,6 @@ extern crate rocket;
 fn healthcheck() -> &'static str {
     "OK"
 }
-#[derive(FromForm)]
-struct RequestBody<'f> {
-    include_summer: bool,
-    starting_semester: Season,
-    starting_year: u32,
-    max_courses_per_term: u32,
-    courses: TempFile<'f>,
-}
-
 #[post("/sequence", data = "<body>")]
 async fn sequence(
     body: Form<RequestBody<'_>>,
