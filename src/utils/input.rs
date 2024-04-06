@@ -11,11 +11,10 @@ pub fn validate_input<'a>(courses: &'a Vec<Course>, config: &SequenceConfig) -> 
             ));
         }
 
-        let course_only_offered_in_summer = course.terms_offered.iter().all(|(season, offered)| {
+        let course_only_offered_in_summer = course.terms_offered.iter().any(|(season, offered)| {
             if *offered {
                 *season == Season::Summer
             } else {
-                true
             }
         });
 
