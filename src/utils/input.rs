@@ -15,6 +15,7 @@ pub fn validate_input<'a>(courses: &'a Vec<Course>, config: &SequenceConfig) -> 
             if *offered {
                 *season == Season::Summer
             } else {
+                true
             }
         });
 
