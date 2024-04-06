@@ -2,13 +2,13 @@ use super::{
     course::Course, prerequisites::validate_prerequisites, sequence::SequenceConfig, term::Season,
 };
 
-pub fn validate_input<'a>(
-    courses: &'a Vec<Course>,
-    config: &SequenceConfig,
-) -> Result<(), (&'static str, &'a Course)> {
+pub fn validate_input<'a>(courses: &'a Vec<Course>, config: &SequenceConfig) -> Result<(), String> {
     for course in courses {
         if !validate_prerequisites(&course.prerequisites, courses) {
-            return Err(("Prerequisites can't be satisfied", course));
+            return Err(format!(
+                "Prerequisite for course {} {} can not be satisfied with the courses given",
+                course.subject_code, course.catalog_code
+            ));
         }
 
         let course_only_offered_in_summer = course.terms_offered.iter().all(|(season, offered)| {
@@ -20,8 +20,10 @@ pub fn validate_input<'a>(
         });
 
         if !config.include_summer && course_only_offered_in_summer {
-            println!("test");
-            return Err(("Course can only be taken in the summer", course));
+            return Err(format!(
+                "Course {} {} can only be taken in the summer",
+                course.subject_code, course.catalog_code,
+            ));
         }
     }
 
@@ -99,7 +101,11 @@ mod tests {
 
         let result = validate_input(&courses, &config);
         assert!(result.is_err());
-        assert_eq!(result.unwrap_err().0, "Prerequisites can't be satisfied");
+        assert_eq!(
+            result.unwrap_err(),
+            "Prerequisite for course CSI 1300 can not be satisfied with the courses given"
+                .to_string()
+        );
     }
 
     #[test]
@@ -133,8 +139,8 @@ mod tests {
         let result = validate_input(&courses, &config);
         assert!(result.is_err());
         assert_eq!(
-            result.unwrap_err().0,
-            "Course can only be taken in the summer"
+            result.unwrap_err(),
+            "Course CSI 1100 can only be taken in the summer".to_string()
         );
     }
 }

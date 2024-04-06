@@ -2,8 +2,11 @@ mod utils;
 
 use rocket::form::Form;
 use rocket::fs::TempFile;
+use rocket::http::Status;
+use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::tokio::io::AsyncReadExt;
+use utils::input::validate_input;
 use utils::sequence::sequence_courses;
 use utils::sequence::SequenceConfig;
 use utils::term::Season;
@@ -28,7 +31,9 @@ struct RequestBody<'f> {
 }
 
 #[post("/sequence", data = "<body>")]
-async fn sequence(body: Form<RequestBody<'_>>) -> Json<Vec<Term>> {
+async fn sequence(
+    body: Form<RequestBody<'_>>,
+) -> Result<status::Custom<Json<Vec<Term>>>, status::Custom<String>> {
     let mut courses_input = body.courses.open().await.unwrap();
     let mut buf = String::new();
 
@@ -42,9 +47,12 @@ async fn sequence(body: Form<RequestBody<'_>>) -> Json<Vec<Term>> {
         max_courses_per_term: body.max_courses_per_term,
     };
 
+    validate_input(&courses_to_sequence, &config)
+        .map_err(|e| status::Custom(Status::BadRequest, e))?;
+
     let sequence = sequence_courses(courses_to_sequence, config);
 
-    Json(sequence)
+    Ok(status::Custom(Status::Ok, Json(sequence)))
 }
 
 #[launch]
