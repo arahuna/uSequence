@@ -18,7 +18,7 @@ pub fn parse_csv(csv: &str) -> Result<Vec<Course>, Box<dyn Error>> {
 #[cfg(test)]
 mod tests {
 
-    use crate::utils::{
+    use crate::{
         prerequisite_tree::{CourseNode, PrerequisiteTree},
         term::Season,
     };
