@@ -1,5 +1,5 @@
 
-use crate::utils::prerequisite_tree::*;
+use crate::prerequisite_tree::*;
 use std::str::FromStr;
 
 grammar;

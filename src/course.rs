@@ -84,9 +84,9 @@ impl Course {
 
     pub fn info(&self) -> CourseInfo {
         CourseInfo {
-            subject_code: self.subject_code,
-            name: self.name,
-            catalog_code: self.catalog_code,
+            subject_code: self.subject_code.clone(),
+            name: self.name.clone(),
+            catalog_code: self.catalog_code.clone(),
         }
     }
 }

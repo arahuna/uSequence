@@ -1,7 +1,7 @@
 use rocket::{form::FromForm, fs::TempFile, FromFormField};
 use serde::{Deserialize, Serialize};
 
-use usequence_server::utils::term::Season;
+use usequence_server::term::Season;
 
 #[derive(FromForm)]
 pub struct RequestBody<'f> {

@@ -1,8 +1,8 @@
 use super::{
-    course::Course, prerequisites::validate_prerequisites, sequence::SequenceConfig, term::Season,
+    config::SequenceConfig, course::Course, prerequisites::validate_prerequisites, term::Season,
 };
 
-pub fn validate_input(courses: &Vec<Course>, config: &SequenceConfig) -> Result<(), String> {
+pub(crate) fn validate_input(courses: &Vec<Course>, config: &SequenceConfig) -> Result<(), String> {
     for course in courses {
         if !validate_prerequisites(&course.prerequisites, courses) {
             return Err(format!(
@@ -11,7 +11,7 @@ pub fn validate_input(courses: &Vec<Course>, config: &SequenceConfig) -> Result<
             ));
         }
 
-        let course_only_offered_in_summer = course.terms_offered.iter().any(|(season, offered)| {
+        let course_only_offered_in_summer = course.terms_offered.iter().all(|(season, offered)| {
             if *offered {
                 *season == Season::Summer
             } else {

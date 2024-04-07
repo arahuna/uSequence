@@ -5,11 +5,10 @@ use rocket::serde::json::Json;
 use rocket::tokio::io::AsyncReadExt;
 
 use models::RequestBody;
-use usequence_server::utils::csv::parse_csv;
-use usequence_server::utils::input::validate_input;
-use usequence_server::utils::sequence::sequence_courses;
-use usequence_server::utils::sequence::SequenceConfig;
-use usequence_server::utils::term::Term;
+use usequence_server::csv::parse_csv_to_courses;
+use usequence_server::term::Term;
+use usequence_server::Sequence;
+use usequence_server::Sequencer;
 
 mod models;
 
@@ -30,18 +29,18 @@ async fn sequence(
 
     courses_input.read_to_string(&mut buf).await.unwrap();
 
-    let courses_to_sequence = parse_csv(&buf).unwrap();
-    let config = SequenceConfig {
-        include_summer: body.include_summer,
-        starting_semester: body.starting_semester.into(),
-        starting_year: body.starting_year,
-        max_courses_per_term: body.max_courses_per_term,
-    };
+    let sequencer = Sequencer::new(
+        body.include_summer,
+        body.starting_semester.into(),
+        body.starting_year,
+        body.max_courses_per_term,
+    );
 
-    validate_input(&courses_to_sequence, &config)
+    let courses_to_sequence = parse_csv_to_courses(&buf).unwrap();
+
+    let sequence = sequencer
+        .sequence(courses_to_sequence)
         .map_err(|e| status::Custom(Status::BadRequest, e))?;
-
-    let sequence = sequence_courses(courses_to_sequence, config);
 
     Ok(status::Custom(Status::Ok, Json(sequence)))
 }
