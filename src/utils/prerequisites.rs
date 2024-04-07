@@ -84,33 +84,28 @@ mod tests {
         };
         let courses_taken = vec![binding, binding2];
 
-        assert_eq!(
+        assert!(
             satisfies_min_credits(6, &None, &None, &courses_taken),
-            true,
             "Should return true when total credits meet the required credits"
         );
 
-        assert_eq!(
+        assert!(
             satisfies_min_credits(3, &None, &Some(vec![String::from("CSI")]), &courses_taken),
-            true,
             "Should return true when total credits meet the required credits and subject matches"
         );
 
-        assert_eq!(
-            satisfies_min_credits(6, &None, &Some(vec![String::from("CSI")]), &courses_taken),
-            false,
+        assert!(
+            !satisfies_min_credits(6, &None, &Some(vec![String::from("CSI")]), &courses_taken),
             "Should return false when total credits do not meet the required credits because subject does not match"
         );
 
-        assert_eq!(
+        assert!(
             satisfies_min_credits(6, &Some(vec![3000, 2000]), &None, &courses_taken),
-            true,
             "Should return true when total credits meet the required credits and level matches"
         );
 
-        assert_eq!(
-            satisfies_min_credits(6, &Some(vec![3000]), &None, &courses_taken),
-            false,
+        assert!(
+            !satisfies_min_credits(6, &Some(vec![3000]), &None, &courses_taken),
             "Should return false when total credits do not meet the required credits because level does not match"
         );
     }
@@ -140,9 +135,8 @@ mod tests {
             catalog_code: 3110,
         });
 
-        assert_eq!(
+        assert!(
             evaluate_prerequisite_tree(&tree, &courses_taken),
-            true,
             "Should return true when prerequisites are satisfied"
         );
     }
@@ -172,9 +166,8 @@ mod tests {
             catalog_code: 3110,
         }));
 
-        assert_eq!(
+        assert!(
             validate_prerequisites(&tree, &courses_taken),
-            true,
             "Should return true when prerequisites are satisfied"
         );
     }

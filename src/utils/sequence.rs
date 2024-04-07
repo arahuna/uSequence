@@ -49,12 +49,12 @@ pub fn sequence_courses(mut courses: Vec<Course>, config: SequenceConfig) -> Vec
         current_season = current_season.next(config.include_summer);
 
         match current_season {
-            Season::Winter => current_year = current_year + 1,
+            Season::Winter => current_year += 1,
             _ => (),
         }
     }
 
-    return result;
+    result
 }
 
 #[cfg(test)]

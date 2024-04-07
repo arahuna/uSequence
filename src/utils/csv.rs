@@ -12,7 +12,7 @@ pub fn parse_csv(csv: &str) -> Result<Vec<Course>, Box<dyn Error>> {
         output.push(Course::new(course_input))
     }
 
-    return Ok(output);
+    Ok(output)
 }
 
 #[cfg(test)]

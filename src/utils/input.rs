@@ -2,7 +2,7 @@ use super::{
     course::Course, prerequisites::validate_prerequisites, sequence::SequenceConfig, term::Season,
 };
 
-pub fn validate_input<'a>(courses: &'a Vec<Course>, config: &SequenceConfig) -> Result<(), String> {
+pub fn validate_input(courses: &Vec<Course>, config: &SequenceConfig) -> Result<(), String> {
     for course in courses {
         if !validate_prerequisites(&course.prerequisites, courses) {
             return Err(format!(
