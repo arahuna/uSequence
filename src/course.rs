@@ -10,6 +10,7 @@ use std::collections::HashMap;
 use super::{prerequisite_tree::PrerequisiteTree, term::Season};
 lalrpop_mod!(pub(crate) parser);
 
+// A model mapping the CSV row inputs
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
 pub struct CourseInput {
@@ -39,10 +40,19 @@ where
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Course {
+    /// The subject code of the course
     pub subject_code: String,
-    pub course_name: String,
+
+    /// The name of the course
+    pub name: String,
+
+    /// The 4-digit course code
     pub catalog_code: u32,
+
+    /// The prerequisite tree for the course
     pub(crate) prerequisites: Option<PrerequisiteTree>,
+
+    /// The terms during which the course is offered
     pub terms_offered: HashMap<Season, bool>,
 }
 
@@ -61,7 +71,7 @@ impl Course {
 
         Self {
             subject_code: input.subject,
-            course_name: input.name,
+            name: input.name,
             catalog_code: input.catalog,
             prerequisites,
             terms_offered: HashMap::from([
@@ -69,6 +79,14 @@ impl Course {
                 (Season::Summer, input.summer),
                 (Season::Fall, input.fall),
             ]),
+        }
+    }
+
+    pub fn info(&self) -> CourseInfo {
+        CourseInfo {
+            subject_code: self.subject_code,
+            name: self.name,
+            catalog_code: self.catalog_code,
         }
     }
 }
@@ -81,7 +99,7 @@ impl Serialize for Course {
         let mut state = serializer.serialize_struct("Course", 3)?;
         state.serialize_field("subject_code", &self.subject_code)?;
         state.serialize_field("catalog_code", &self.catalog_code)?;
-        state.serialize_field("course_name", &self.course_name)?;
+        state.serialize_field("course_name", &self.name)?;
 
         state.end()
     }
@@ -92,17 +110,28 @@ impl fmt::Display for Course {
         write!(
             f,
             "{} {}: {}",
-            self.subject_code, self.catalog_code, self.course_name
+            self.subject_code, self.catalog_code, self.name
         )?;
         Ok(())
     }
 }
 
+/// A simplified course model
 #[derive(Serialize)]
 pub struct CourseInfo {
     pub subject_code: String,
-    pub course_name: String,
+    pub name: String,
     pub catalog_code: u32,
+}
+
+impl From<Course> for CourseInfo {
+    fn from(course: Course) -> Self {
+        CourseInfo {
+            subject_code: course.subject_code,
+            name: course.name,
+            catalog_code: course.catalog_code,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -130,7 +159,7 @@ mod tests {
 
         let expected = Course {
             subject_code: String::from("CSI"),
-            course_name: String::from("Intro to computing"),
+            name: String::from("Intro to computing"),
             catalog_code: 1111,
             prerequisites: Some(PrerequisiteTree::AndNode(LogicNode::new(
                 PrerequisiteTree::CourseNode(CourseNode {
@@ -166,7 +195,7 @@ mod tests {
 
         let expected = Course {
             subject_code: String::from("CSI"),
-            course_name: String::from("Intro to computing"),
+            name: String::from("Intro to computing"),
             catalog_code: 1111,
             prerequisites: None,
             terms_offered: HashMap::from([

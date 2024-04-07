@@ -74,14 +74,14 @@ mod tests {
     fn test_satisfies_min_credits() {
         let binding = Course {
             subject_code: String::from("MAT"),
-            course_name: String::from("A math course"),
+            name: String::from("A math course"),
             catalog_code: 2132,
             prerequisites: None,
             terms_offered: HashMap::new(),
         };
         let binding2 = Course {
             subject_code: String::from("CSI"),
-            course_name: String::from("a computing course"),
+            name: String::from("a computing course"),
             catalog_code: 3110,
             prerequisites: None,
             terms_offered: HashMap::new(),
@@ -118,7 +118,7 @@ mod tests {
     fn test_evaluate_prerequisite_tree() {
         let binding = Course {
             subject_code: String::from("CSI"),
-            course_name: String::from("A computing course"),
+            name: String::from("A computing course"),
             catalog_code: 3110,
             prerequisites: None,
             terms_offered: HashMap::new(),
@@ -126,7 +126,7 @@ mod tests {
 
         let binding2 = Course {
             subject_code: String::from("MAT"),
-            course_name: String::from("A math course"),
+            name: String::from("A math course"),
             catalog_code: 2132,
             prerequisites: None,
             terms_offered: HashMap::new(),
@@ -149,7 +149,7 @@ mod tests {
     fn test_validate_prerequisites() {
         let binding = Course {
             subject_code: String::from("CSI"),
-            course_name: String::from("Advanced computing"),
+            name: String::from("Advanced computing"),
             catalog_code: 3110,
             prerequisites: None,
             terms_offered: HashMap::new(),
@@ -157,7 +157,7 @@ mod tests {
 
         let binding2 = Course {
             subject_code: String::from("MAT"),
-            course_name: String::from("Intro to Math"),
+            name: String::from("Intro to Math"),
             catalog_code: 2132,
             prerequisites: None,
             terms_offered: HashMap::new(),

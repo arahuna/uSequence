@@ -43,14 +43,14 @@ mod tests {
         let courses = vec![
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1100,
                 prerequisites: None,
                 terms_offered: HashMap::from([(Season::Fall, true)]),
             },
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1200,
                 prerequisites: Some(PrerequisiteTree::CourseNode(CourseNode {
                     subject_code: "CSI".to_string(),
@@ -76,14 +76,14 @@ mod tests {
         let courses = vec![
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1100,
                 prerequisites: None,
                 terms_offered: HashMap::from([(Season::Fall, true)]),
             },
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1300,
                 prerequisites: Some(PrerequisiteTree::CourseNode(CourseNode {
                     subject_code: "CSI".to_string(),
@@ -113,14 +113,14 @@ mod tests {
         let courses = vec![
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1100,
                 prerequisites: None,
                 terms_offered: HashMap::from([(Season::Summer, true)]),
             },
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1300,
                 prerequisites: Some(PrerequisiteTree::CourseNode(CourseNode {
                     subject_code: "CSI".to_string(),

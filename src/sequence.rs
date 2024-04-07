@@ -6,11 +6,19 @@ use super::{
     term::{Season, Term},
 };
 
+/// Config used when sequencing courses
 #[derive(Debug, Deserialize, Copy, Clone)]
 pub struct SequenceConfig {
+    /// Whether we should include the summer term
     pub include_summer: bool,
+
+    /// The year the course sequence should start in
     pub starting_year: u32,
+
+    /// The semester the sequence should start in
     pub starting_semester: Season,
+
+    /// The maximum number of courses that can be in a term
     pub max_courses_per_term: u32,
 }
 
@@ -72,7 +80,7 @@ mod test {
         let courses = vec![
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1111,
                 prerequisites: None,
                 terms_offered: HashMap::from([
@@ -83,7 +91,7 @@ mod test {
             },
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1112,
                 prerequisites: Some(PrerequisiteTree::CourseNode(CourseNode {
                     subject_code: "CSI".to_string(),
@@ -97,7 +105,7 @@ mod test {
             },
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 1113,
                 prerequisites: Some(PrerequisiteTree::CourseNode(CourseNode {
                     subject_code: "MAT".to_string(),
@@ -111,7 +119,7 @@ mod test {
             },
             Course {
                 subject_code: "MAT".to_string(),
-                course_name: String::from("A math course"),
+                name: String::from("A math course"),
                 catalog_code: 1111,
                 prerequisites: None,
                 terms_offered: HashMap::from([
@@ -122,7 +130,7 @@ mod test {
             },
             Course {
                 subject_code: "CSI".to_string(),
-                course_name: String::from("A computing course"),
+                name: String::from("A computing course"),
                 catalog_code: 2111,
                 prerequisites: Some(PrerequisiteTree::AndNode(LogicNode::new(
                     PrerequisiteTree::CourseNode(CourseNode {
@@ -142,7 +150,7 @@ mod test {
             },
             Course {
                 subject_code: "PHY".to_string(),
-                course_name: String::from("A physics course"),
+                name: String::from("A physics course"),
                 catalog_code: 1111,
                 prerequisites: None,
                 terms_offered: HashMap::from([

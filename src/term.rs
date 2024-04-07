@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use super::course::Course;
 
+/// An Enum for the seasons during which a Term can take place
 #[derive(Debug, Hash, PartialEq, Eq, Copy, Clone, Serialize, Deserialize)]
 pub enum Season {
     Summer,
@@ -38,8 +39,13 @@ impl Season {
 
 #[derive(Debug, Serialize)]
 pub struct Term {
+    /// The season during which the term takes place
     season: Season,
+
+    /// The year during which the term takes place
     year: u32,
+
+    /// The courses taken during the term
     pub courses: Vec<Course>,
 }
 
