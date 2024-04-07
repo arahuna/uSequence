@@ -1,8 +1,8 @@
 use crate::term::Season;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 /// Config used when sequencing courses
-#[derive(Debug, Deserialize, Copy, Clone)]
+#[derive(Debug, Serialize, Deserialize, Copy, Clone)]
 pub struct SequenceConfig {
     /// Whether we should include the summer term
     pub include_summer: bool,

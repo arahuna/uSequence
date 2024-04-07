@@ -189,4 +189,16 @@ mod tests {
 
         assert_eq!(PrerequisiteParser::new().parse(&input).unwrap(), expected);
     }
+
+    #[test]
+    fn test() {
+        let input = String::from("Prerequisite: ITI 1120.");
+
+        let expected = PrerequisiteTree::CourseNode(CourseNode {
+            catalog_code: 1120,
+            subject_code: "ITI".to_string(),
+        });
+
+        assert_eq!(PrerequisiteParser::new().parse(&input).unwrap(), expected);
+    }
 }

@@ -9,7 +9,7 @@ pub fn parse_csv_to_courses(input: &str) -> Result<Vec<Course>, Box<dyn Error>> 
     for result in rdr.deserialize() {
         let course_input: CourseInput = result.expect("Failed to deserialize");
 
-        output.push(Course::new(course_input))
+        output.push(Course::new(course_input).unwrap())
     }
 
     Ok(output)

@@ -57,19 +57,13 @@ pub struct Course {
 }
 
 impl Course {
-    pub fn new(input: CourseInput) -> Self {
-        let prerequisites = input.prerequisites.as_ref().map(|prerequisites_str| {
-            PrerequisiteParser::new()
-                .parse(prerequisites_str)
-                .unwrap_or_else(|_| {
-                    panic!(
-                        "Error parsing prerequisites for course {} {}: {}",
-                        input.subject, input.catalog, prerequisites_str
-                    )
-                })
-        });
+    pub fn new(input: CourseInput) -> Result<Self, String> {
+        let prerequisites = input
+            .prerequisites
+            .as_ref()
+            .map(|prerequisites_str| PrerequisiteParser::new().parse(prerequisites_str).unwrap());
 
-        Self {
+        Ok(Self {
             subject_code: input.subject,
             name: input.name,
             catalog_code: input.catalog,
@@ -79,7 +73,7 @@ impl Course {
                 (Season::Summer, input.summer),
                 (Season::Fall, input.fall),
             ]),
-        }
+        })
     }
 
     pub fn info(&self) -> CourseInfo {
@@ -178,7 +172,7 @@ mod tests {
             ]),
         };
 
-        assert_eq!(Course::new(input), expected);
+        assert_eq!(Course::new(input).unwrap(), expected);
     }
 
     #[test]
@@ -205,6 +199,6 @@ mod tests {
             ]),
         };
 
-        assert_eq!(Course::new(input), expected);
+        assert_eq!(Course::new(input).unwrap(), expected);
     }
 }

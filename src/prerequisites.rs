@@ -86,7 +86,7 @@ mod tests {
             prerequisites: None,
             terms_offered: HashMap::new(),
         };
-        let courses_taken = vec![binding, binding2];
+        let courses_taken = vec![&binding, &binding2];
 
         assert!(
             satisfies_min_credits(6, &None, &None, &courses_taken),

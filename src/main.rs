@@ -1,11 +1,16 @@
+use models::RequestTimer;
 use rocket::form::Form;
+use rocket::http::Method;
 use rocket::http::Status;
 use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::tokio::io::AsyncReadExt;
 
+use rocket_cors::{AllowedOrigins, CorsOptions};
+
 use models::RequestBody;
 use usequence::csv::parse_csv_to_courses;
+use usequence::term::CourseSequence;
 use usequence::term::Term;
 use usequence::Sequence;
 use usequence::Sequencer;
@@ -47,5 +52,18 @@ async fn sequence(
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![healthcheck, sequence])
+    let cors = CorsOptions::default()
+        .allowed_origins(AllowedOrigins::all())
+        .allowed_methods(
+            vec![Method::Get, Method::Post]
+                .into_iter()
+                .map(From::from)
+                .collect(),
+        )
+        .allow_credentials(true);
+
+    rocket::build()
+        .attach(RequestTimer::default())
+        .attach(cors.to_cors().unwrap())
+        .mount("/", routes![healthcheck, sequence])
 }

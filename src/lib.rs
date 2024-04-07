@@ -2,6 +2,7 @@ use config::SequenceConfig;
 use course::Course;
 use input::validate_input;
 use prerequisites::validate_prerequisites;
+use serde::Serialize;
 use term::{Season, Term};
 
 /* TYPES */
@@ -19,6 +20,7 @@ pub trait Sequence {
     fn sequence(&self, courses: Vec<Course>) -> Result<Vec<Term>, String>;
 }
 
+#[derive(Serialize)]
 pub struct Sequencer {
     config: SequenceConfig,
 }
@@ -69,13 +71,13 @@ impl Sequence for Sequencer {
                         && *c.terms_offered.get(&current_season).unwrap()
                 }) {
                     let next_course = courses.remove(next_course_index);
-                    current_term.courses.push(next_course.clone());
+                    current_term.courses.push(next_course);
                 } else {
                     break;
                 }
             }
 
-            courses_taken.extend(current_term.courses.clone());
+            courses_taken.extend(current_term.courses);
 
             result.push(current_term);
             current_season = current_season.next(self.config.include_summer);
