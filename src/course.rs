@@ -108,9 +108,13 @@ pub struct CourseInfo {
 #[cfg(test)]
 mod tests {
 
-    use crate::utils::prerequisite_tree::{CourseNode, LogicNode};
+    use std::collections::HashMap;
 
-    use super::*;
+    use crate::{
+        course::{Course, CourseInput},
+        prerequisite_tree::{CourseNode, LogicNode, PrerequisiteTree},
+        term::Season,
+    };
 
     #[test]
     fn convert_input_to_course() {

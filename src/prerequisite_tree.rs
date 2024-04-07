@@ -36,7 +36,7 @@ pub(crate) enum PrerequisiteTree {
 
 #[cfg(test)]
 mod tests {
-    use crate::utils::{
+    use crate::{
         course::parser::PrerequisiteParser,
         prerequisite_tree::{CourseNode, LogicNode, MinCreditNode, PrerequisiteTree},
     };

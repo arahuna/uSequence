@@ -4,10 +4,9 @@ pub(crate) fn validate_prerequisites(
     prerequisites: &Option<PrerequisiteTree>,
     courses_taken: &Vec<Course>,
 ) -> bool {
-    if let Some(prerequisites) = prerequisites {
-        evaluate_prerequisite_tree(prerequisites, courses_taken)
-    } else {
-        true
+    match prerequisites {
+        Some(prerequisites) => evaluate_prerequisite_tree(prerequisites, courses_taken),
+        None => true,
     }
 }
 
@@ -61,9 +60,14 @@ fn satisfies_min_credits(
 #[cfg(test)]
 mod tests {
 
-    use crate::utils::prerequisite_tree::CourseNode;
+    use crate::{
+        course::Course,
+        prerequisite_tree::{CourseNode, PrerequisiteTree},
+        prerequisites::{
+            evaluate_prerequisite_tree, satisfies_min_credits, validate_prerequisites,
+        },
+    };
 
-    use super::*;
     use std::collections::HashMap;
 
     #[test]

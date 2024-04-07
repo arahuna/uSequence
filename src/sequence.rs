@@ -60,13 +60,12 @@ pub fn sequence_courses(mut courses: Vec<Course>, config: SequenceConfig) -> Vec
 mod test {
     use std::collections::HashMap;
 
-    use crate::utils::{
+    use crate::{
         course::Course,
         prerequisite_tree::{CourseNode, LogicNode, PrerequisiteTree},
+        sequence::{sequence_courses, SequenceConfig},
         term::Season,
     };
-
-    use super::{sequence_courses, SequenceConfig};
 
     #[test]
     fn sequence_courses_test() {
