@@ -34,7 +34,7 @@ pub fn validate_input(courses: &Vec<Course>, config: &SequenceConfig) -> Result<
 mod tests {
     use std::collections::HashMap;
 
-    use crate::utils::prerequisite_tree::{CourseNode, PrerequisiteTree};
+    use crate::prerequisite_tree::{CourseNode, PrerequisiteTree};
 
     use super::*;
 
