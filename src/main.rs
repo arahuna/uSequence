@@ -5,10 +5,10 @@ use rocket::serde::json::Json;
 use rocket::tokio::io::AsyncReadExt;
 
 use models::RequestBody;
-use usequence_server::csv::parse_csv_to_courses;
-use usequence_server::term::Term;
-use usequence_server::Sequence;
-use usequence_server::Sequencer;
+use usequence::csv::parse_csv_to_courses;
+use usequence::term::Term;
+use usequence::Sequence;
+use usequence::Sequencer;
 
 mod models;
 

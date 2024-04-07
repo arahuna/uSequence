@@ -1,5 +1,5 @@
 [package]
-name = "usequence-server"
+name = "usequence"
 version = "0.1.0"
 edition = "2021"
 
@@ -19,6 +19,6 @@ default = []
 bin = ["rocket"]
 
 [[bin]]
-name = "usequence-server"
+name = "usequence"
 path = "src/main.rs"
 required-features = ["bin"]
