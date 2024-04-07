@@ -5,7 +5,7 @@ use std::str::FromStr;
 grammar;
 
 /* START */
-pub Prerequisite: PrerequisiteTree = {
+pub(crate) Prerequisite: PrerequisiteTree = {
     <expr: PrereqExpr>"." => expr,
     <m: MinCredits>"." => m,
     <expr: PrereqExpr> AND <m: MinCredits>"." => PrerequisiteTree::AndNode(LogicNode::new(expr, m)),
@@ -29,19 +29,19 @@ Course: CourseNode = {
 }
 
 MinCredits: PrerequisiteTree = {
-    <units: r"[0-9]{1,2}"> r"(university|course)" "units in" <s:SubjectExpr> => PrerequisiteTree::MinCreditNode(MinCreditNode{ 
+    <units: r"[0-9]{1,2}"> r"(university|course) units in " <s:SubjectExpr> => PrerequisiteTree::MinCreditNode(MinCreditNode{ 
         credits: u32::from_str(units).unwrap(),
         required_subjects: Some(s),
         required_levels: None
      }),
-     <units: r"[0-9]{1,2}"> r"(university|course)" "units in" <s:SubjectExpr> "at the" <l: LevelExpr> "level" => PrerequisiteTree::MinCreditNode(MinCreditNode{ 
+     <units: r"[0-9]{1,2}"> r"(university|course) units in " <s:SubjectExpr> "at the" <l: LevelExpr> "level" => PrerequisiteTree::MinCreditNode(MinCreditNode{ 
         credits: u32::from_str(units).unwrap(),
         required_subjects: Some(s),
         required_levels: Some(l)
      }),
 }
 
-pub SubjectExpr: Vec<String> = {
+SubjectExpr: Vec<String> = {
     <s: SubjectCode> => vec![s],
     <s: SubjectCode> OR <rest: SubjectExpr> => {
         let mut v = vec![s];
@@ -70,6 +70,7 @@ OR: () = {
 }
 
 SubjectCode: String = {
+    r"([a-zA-Z][a-z]+)"+ "(" <code:SubjectCode> ")" => code,
     r"[A-Z]{3}" => String::from(<>)
 }
 

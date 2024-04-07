@@ -1,4 +1,3 @@
-use rocket::FromForm;
 use serde::Deserialize;
 
 use super::{
@@ -7,7 +6,7 @@ use super::{
     term::{Season, Term},
 };
 
-#[derive(Debug, Deserialize, Copy, Clone, FromForm)]
+#[derive(Debug, Deserialize, Copy, Clone)]
 pub struct SequenceConfig {
     pub include_summer: bool,
     pub starting_year: u32,

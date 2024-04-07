@@ -1,10 +1,9 @@
 use core::fmt;
-use rocket::{serde::Deserialize, FromFormField};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use super::course::Course;
 
-#[derive(Debug, Hash, PartialEq, Eq, Copy, Clone, Serialize, Deserialize, FromFormField)]
+#[derive(Debug, Hash, PartialEq, Eq, Copy, Clone, Serialize, Deserialize)]
 pub enum Season {
     Summer,
     Fall,
@@ -22,7 +21,7 @@ impl fmt::Display for Season {
 }
 
 impl Season {
-    pub fn next(&self, include_summer: bool) -> Season {
+    pub(crate) fn next(&self, include_summer: bool) -> Season {
         match self {
             Season::Summer => Season::Fall,
             Season::Fall => Season::Winter,

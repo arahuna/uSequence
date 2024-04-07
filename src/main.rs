@@ -4,12 +4,14 @@ use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::tokio::io::AsyncReadExt;
 
-use usequence_server::models::RequestBody;
+use models::RequestBody;
 use usequence_server::utils::csv::parse_csv;
 use usequence_server::utils::input::validate_input;
 use usequence_server::utils::sequence::sequence_courses;
 use usequence_server::utils::sequence::SequenceConfig;
 use usequence_server::utils::term::Term;
+
+mod models;
 
 #[macro_use]
 extern crate rocket;
@@ -18,6 +20,7 @@ extern crate rocket;
 fn healthcheck() -> &'static str {
     "OK"
 }
+
 #[post("/sequence", data = "<body>")]
 async fn sequence(
     body: Form<RequestBody<'_>>,
@@ -30,7 +33,7 @@ async fn sequence(
     let courses_to_sequence = parse_csv(&buf).unwrap();
     let config = SequenceConfig {
         include_summer: body.include_summer,
-        starting_semester: body.starting_semester,
+        starting_semester: body.starting_semester.into(),
         starting_year: body.starting_year,
         max_courses_per_term: body.max_courses_per_term,
     };

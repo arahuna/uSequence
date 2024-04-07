@@ -8,7 +8,7 @@ use serde::{
 use std::collections::HashMap;
 
 use super::{prerequisite_tree::PrerequisiteTree, term::Season};
-lalrpop_mod!(pub parser);
+lalrpop_mod!(pub(crate) parser);
 
 #[derive(Deserialize, Debug, Clone)]
 #[serde(rename_all = "PascalCase")]
@@ -42,7 +42,7 @@ pub struct Course {
     pub subject_code: String,
     pub course_name: String,
     pub catalog_code: u32,
-    pub prerequisites: Option<PrerequisiteTree>,
+    pub(crate) prerequisites: Option<PrerequisiteTree>,
     pub terms_offered: HashMap<Season, bool>,
 }
 
@@ -96,6 +96,13 @@ impl fmt::Display for Course {
         )?;
         Ok(())
     }
+}
+
+#[derive(Serialize)]
+pub struct CourseInfo {
+    pub subject_code: String,
+    pub course_name: String,
+    pub catalog_code: u32,
 }
 
 #[cfg(test)]

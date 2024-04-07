@@ -1,6 +1,6 @@
 use super::{course::Course, prerequisite_tree::PrerequisiteTree};
 
-pub fn validate_prerequisites(
+pub(crate) fn validate_prerequisites(
     prerequisites: &Option<PrerequisiteTree>,
     courses_taken: &Vec<Course>,
 ) -> bool {

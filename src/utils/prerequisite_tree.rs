@@ -1,11 +1,11 @@
 #[derive(Debug, PartialEq, Clone)]
-pub struct CourseNode {
+pub(crate) struct CourseNode {
     pub subject_code: String,
     pub catalog_code: u32,
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct LogicNode {
+pub(crate) struct LogicNode {
     pub left: Box<PrerequisiteTree>,
     pub right: Box<PrerequisiteTree>,
 }
@@ -20,14 +20,14 @@ impl LogicNode {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct MinCreditNode {
+pub(crate) struct MinCreditNode {
     pub credits: u32,
     pub required_subjects: Option<Vec<String>>,
     pub required_levels: Option<Vec<u32>>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum PrerequisiteTree {
+pub(crate) enum PrerequisiteTree {
     CourseNode(CourseNode),
     OrNode(LogicNode),
     AndNode(LogicNode),
@@ -175,5 +175,18 @@ mod tests {
         ));
 
         assert_eq!(PrerequisiteParser::new().parse(&input).unwrap(), expected)
+    }
+
+    #[test]
+    fn min_credit_expanded() {
+        let input = String::from("18 course units in Computer Science (CSI) or Software Engineering (SEG) at the 3000 level.");
+
+        let expected = PrerequisiteTree::MinCreditNode(MinCreditNode {
+            credits: 18,
+            required_levels: Some(vec![3000]),
+            required_subjects: Some(vec!["CSI".to_string(), "SEG".to_string()]),
+        });
+
+        assert_eq!(PrerequisiteParser::new().parse(&input).unwrap(), expected);
     }
 }
