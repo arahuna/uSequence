@@ -77,7 +77,7 @@ impl Sequence for Sequencer {
                 }
             }
 
-            courses_taken.extend(current_term.courses);
+            courses_taken.extend(current_term.courses.clone());
 
             result.push(current_term);
             current_season = current_season.next(self.config.include_summer);
