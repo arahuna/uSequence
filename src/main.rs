@@ -10,7 +10,6 @@ use rocket_cors::{AllowedOrigins, CorsOptions};
 
 use models::RequestBody;
 use usequence::csv::parse_csv_to_courses;
-use usequence::term::CourseSequence;
 use usequence::term::Term;
 use usequence::Sequence;
 use usequence::Sequencer;
@@ -31,6 +30,13 @@ async fn sequence(
 ) -> Result<status::Custom<Json<Vec<Term>>>, status::Custom<String>> {
     let mut courses_input = body.courses.open().await.unwrap();
     let mut buf = String::new();
+
+    if body.max_courses_per_term <= 0 {
+        return Err(status::Custom(
+            Status::BadRequest,
+            "Invalid request: max courses per term must be greater than 0".to_string(),
+        ));
+    }
 
     courses_input.read_to_string(&mut buf).await.unwrap();
 
