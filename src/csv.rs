@@ -1,10 +1,12 @@
-use csv;
+use csv::{ReaderBuilder, Trim};
 use std::error::Error;
 
 use super::course::{Course, CourseInput};
 
 pub fn parse_csv_to_courses(input: &str) -> Result<Vec<Course>, Box<dyn Error>> {
-    let mut rdr = csv::Reader::from_reader(input.as_bytes());
+    let mut rdr = ReaderBuilder::new()
+        .trim(Trim::All)
+        .from_reader(input.as_bytes());
     let mut output: Vec<Course> = vec![];
     for result in rdr.deserialize() {
         let course_input: CourseInput = result.expect("Failed to deserialize");
